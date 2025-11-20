@@ -48,7 +48,7 @@ class ExtractionMethod(Enum):
     META_TAGS = "meta tags"
     JSON_LD = "JSON-LD structured data"
     CSS_SELECTORS = "CSS selectors"
-    REGEX_CONTENT = "regex on content"
+    # REGEX_CONTENT = "regex on content"
     HTMLDATE_LIB = "htmldate library"
     NOT_FOUND = "not found"
 
@@ -497,6 +497,7 @@ class HTMLDateExtractor:
     def _extract_from_regex(
         self, html_content: str
     ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+        """ Not using now (Not Reliable) """
         """Extract date using regex patterns on content."""
         for pattern in self.DATE_PATTERNS:
             matches = re.findall(pattern, html_content, re.IGNORECASE)
@@ -573,14 +574,13 @@ class HTMLDateExtractor:
         }
         
         medium_confidence_methods = {
-            ExtractionMethod.HTML5_TIME,
             ExtractionMethod.META_TAGS,
-            ExtractionMethod.CSS_SELECTORS,
             ExtractionMethod.HTMLDATE_LIB
         }
 
         low_confidence_methods = {
-            ExtractionMethod.REGEX_CONTENT
+            ExtractionMethod.HTML5_TIME,
+            ExtractionMethod.CSS_SELECTORS,
         }
         
         if extract_method in high_confidence_methods:
