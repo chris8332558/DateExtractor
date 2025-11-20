@@ -6,7 +6,7 @@ from datetime import date, datetime
 
 if __name__ == "__main__":
     INPUT_FILE = "data/first_content_sample.json"
-    OUTPUT_FOLDER = "data/cutoff_results"
+    OUTPUT_FOLDER = "data/extract_results"
 
     try:
         os.makedirs(OUTPUT_FOLDER, exist_ok=True)
