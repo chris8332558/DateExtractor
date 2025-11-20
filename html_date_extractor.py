@@ -123,7 +123,7 @@ class HTMLDateExtractor:
         
         if use_htmldate:
             try:
-                from htmldate import find_date
+                from htmldate_test import find_date
                 self.htmldate_available = True
                 self.logger.info("htmldate library available for fallback")
             except ImportError:
@@ -230,6 +230,11 @@ class HTMLDateExtractor:
         mod_confidence = self._calculate_confidence(mod_method)
 
         all_dates = self._extract_all_dates(tree, html_content)
+        if published_date and published_date not in all_dates:
+            all_dates.append(published_date)
+        if modified_date and modified_date not in all_dates:
+            all_dates.append(modified_date)
+        all_dates.sort()
         last_date = all_dates[-1] if all_dates else None
         
         # Log results
@@ -295,8 +300,7 @@ class HTMLDateExtractor:
                     dates.append(dt)
                     seen.add(key)
         # Sort by date
-        dates.sort()
-        self.logger.info(f"All Dates Found (sorted): {dates}")
+        self.logger.info(f"All Dates Found (unsorted): {dates}")
         return dates
         
         
@@ -509,7 +513,7 @@ class HTMLDateExtractor:
     ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
         """Extract date using htmldate library."""
         try:
-            from htmldate import find_date
+            from htmldate_test import find_date
             
             date_str = find_date(
                 html_content,

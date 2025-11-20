@@ -1,20 +1,18 @@
 import json
 import os
 from tqdm import tqdm
+from htmldate import find_date
 from html_date_extractor import HTMLDateExtractor, DateResult
 from typing import List, Dict
 from datetime import date, datetime
 
 def filter_html_before_cutoff(html_content: str, cutoff_date: date) -> DateResult:
-    extractor = HTMLDateExtractor(disable_logger=True)
-    date_result = extractor.extract_from_html(html_content)
     # extractor.print_dateResult(date_result)
     return date_result
     
             
 if __name__ == "__main__":
-    CUTOFF_DATE = date(2025, 10, 1)
-    print(f"CUTOFF DATE: {CUTOFF_DATE}")
+    extractor = HTMLDateExtractor(disable_logger=True)
 
     INPUT_FILE = "data/first_content_sample.json"
     OUTPUT_FOLDER = "data/cutoff_results"
@@ -25,7 +23,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error creating folder: {e}")
 
-    OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"cutoff_before_{CUTOFF_DATE.isoformat()}.json")
+    OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"date_extractor_result.json")
     cutoff_results = []
 
     # Load html content from the INPUT_FILE
@@ -38,13 +36,16 @@ if __name__ == "__main__":
         html_content = d['text']
         isValid = d['success']
 
-        date_result = filter_html_before_cutoff(html_content, CUTOFF_DATE)
-        if isValid and date_result.last_date_found and date_result.last_date_found <= CUTOFF_DATE:
+        date_result = extractor.extract_from_html(html_content)
+        published_date_str = f"{date_result.published_date.isoformat()} (method: {date_result.published_method.value}, confidence: {date_result.pub_confidence})" if date_result.published_date else None
+        modified_date_str = f"{date_result.modified_date.isoformat()} (method: {date_result.modified_method.value}, confidence: {date_result.mod_confidence})" if date_result.modified_date else None
+        if isValid:
             cutoff_results.append({
                 'url': url,
-                'published_date': date_result.published_date.isoformat() if date_result.published_date else None,
-                'modified_date': date_result.modified_date.isoformat() if date_result.modified_date else None,
-                'last_date_found': date_result.last_date_found.isoformat(),
+                'published_date': published_date_str,
+                'modified_date': modified_date_str,
+                'last_date_found': date_result.last_date_found.isoformat() if date_result.last_date_found else None,
+                'all_dates_found': [d.isoformat() for d in date_result.dates_found] if date_result.dates_found else None,
                 # 'html_content': html_content
             })
     

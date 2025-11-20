@@ -52,7 +52,7 @@ extractor.print_dateResult(result)
 ## Cutoff Filter
 
 ### What is does
-Given HTML contents, fileter out those HTML with a `last_foun_date` >= `CUTOFF_DATE`.
+Given HTML contents, use `HTMLDateExtractor` to fileter out those HTML with a `last_foun_date` >= `CUTOFF_DATE`.
 
 Store the filtered result to `data/curoff_results/cutoff_before_<CUTOFF_DATE>.json`
 
@@ -62,7 +62,16 @@ Go to `cutoff_filter.py`, change the `CUTOFF_DATE`, `INPUT_FILE`, and `OUTPUT_FI
 
 
 
-## Tests (Not applicable)
+
+## Data
+
+The `first_content_sample.json` is the first object from our larget dataset `with_urls_html_text_content.json`.
+
+
+
+
+
+## Tests (Not applicable now)
 
 ### What is does
 Test the `HTMLDateExtrator` to see if it can extract the published date correctly.
