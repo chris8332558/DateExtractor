@@ -10,6 +10,11 @@
     "modified_date": null
   },
   {
+    "url": "https://www.ndu.edu/Portals/59/Documents/Incoming/AY25/NDU%20Catalog%20AY25.pdf",
+    "published_date": "2024" ,
+    "modified_date": null
+  },
+  {
     "url": "https://www.congress.gov/crs-product/IF11712",
     "published_date": "2021-04-01",
     "modified_date": null 
@@ -24,9 +29,29 @@
     "published_date": null,
     "modified_date": "2025-08-28"
   },
+  { 
+    "url": "https://www.reuters.com/world/asia-pacific/chinese-us-military-chiefs-hold-crisis-communication-says-china-defence-ministry-2020-10-29/",
+    "published_date": "2020-10-29",
+    "modified_date": "2020-10-29"
+  },
+  {
+    "url": "https://cset.georgetown.edu/wp-content/uploads/CSET-Universities-and-the-Chinese-Defense-Technology-Workforce-3.pdf",
+    "published_date": "2020-12",
+    "modified_date": null
+  },
   {
     "url": "https://www.scirp.org/journal/paperinformation?paperid=97134",
     "published_date": "2019-12-16",
+    "modified_date": null
+  },
+  {
+    "url": "https://www.cambridge.org/us/universitypress/subjects/history/east-asian-history/cold-war-island-quemoy-front-line",
+    "published_date": null,
+    "modified_date": null
+  },
+  {
+    "url": "https://history.state.gov/milestones/1866-1898/chinese-immigration",
+    "published_date": null,
     "modified_date": null
   },
   {
@@ -45,9 +70,19 @@
     "modified_date": null
   },
   {
+    "url": "http://www.dni.gov/files/ODNI/documents/assessments/GlobalTrends_2040.pdf",
+    "published_date": null,
+    "modified_date": null
+  },
+  {
     "url": "https://scholar.google.com/citations?user=UH87_zMAAAAJ&hl=en",
     "published_date": null,
     "modified_date": "2025"
+  },
+  {
+    "url": "https://www.un.org/development/desa/dpad/wp-content/uploads/sites/45/WESP_2024_Web.pdf",
+    "published_date": null,
+    "modified_date": null
   },
   {
     "url": "https://tjaglcs.army.mil/Periodicals/Military-Law-Review",

@@ -43,7 +43,6 @@ import dateparser
 
 class ExtractionMethod(Enum):
     """Enum for tracking which method successfully extracted the date."""
-    SCHEMA_ORG = "schema.org metadata"
     OPEN_GRAPH = "Open Graph protocol"
     HTML5_TIME = "HTML5 time element"
     META_TAGS = "meta tags"
@@ -310,11 +309,16 @@ class HTMLDateExtractor:
         """Extract published date using multiple strategies."""
         
         # Strategy 1: JSON-LD structured data (Schema.org)
+        # <script type="application/ld+json">
+        # //<![CDATA[
+        #   {"@context":"http://schema.org", "@type: ..., ..., "dateCreated":"2020-09-16T14:24:00Z","datePublished":"2020-09-16T14:24:00Z","dateModified":"2025-06-03T08:40:58Z", ...
+        # //]]>
         result = self._extract_from_jsonld(tree, 'datePublished')
         if result[0]:
             return result
         
         # Strategy 2: Open Graph meta tags
+        # <meta property="og:article:modified_time" content="2020-10-29T22:07:06Z"/><meta property="og:updated_time" content="2020-10-29T22:07:06Z"/><meta property="og:article:published_time" content="2020-10-29T22:07:05Z"/>
         result = self._extract_from_opengraph(tree, self.PUBLISHED_META_NAMES)
         if result[0]:
             return result
@@ -325,6 +329,7 @@ class HTMLDateExtractor:
             return result
         
         # Strategy 4: Meta tags
+        # <meta name="article:published_time" content="2020-10-29T22:07:05Z"/><meta name="article:modified_time" content="2020-10-29T22:07:06Z"/>
         result = self._extract_from_meta_tags(tree, self.PUBLISHED_META_NAMES)
         if result[0]:
             return result
@@ -334,12 +339,7 @@ class HTMLDateExtractor:
         if result[0]:
             return result
         
-        # Strategy 6: Regex on content
-        result = self._extract_from_regex(html_content)
-        if result[0]:
-            return result
-        
-        # Strategy 7: htmldate library fallback
+        # Strategy 6: htmldate library fallback
         if self.use_htmldate and self.htmldate_available:
             result = self._extract_with_htmldate(html_content, original=True)
             if result[0]:
@@ -568,24 +568,29 @@ class HTMLDateExtractor:
     ) -> str:
         """Calculate confidence level based on extraction methods used."""
         high_confidence_methods = {
-            ExtractionMethod.SCHEMA_ORG,
             ExtractionMethod.JSON_LD,
             ExtractionMethod.OPEN_GRAPH
         }
         
         medium_confidence_methods = {
             ExtractionMethod.HTML5_TIME,
-            ExtractionMethod.META_TAGS
+            ExtractionMethod.META_TAGS,
+            ExtractionMethod.CSS_SELECTORS,
+            ExtractionMethod.HTMLDATE_LIB
+        }
+
+        low_confidence_methods = {
+            ExtractionMethod.REGEX_CONTENT
         }
         
         if extract_method in high_confidence_methods:
             return "high"
         elif extract_method in medium_confidence_methods:
             return "medium"
-        elif extract_method == ExtractionMethod.NOT_FOUND:
-            return "low (Couldn't find publised date)"
+        elif extract_method in low_confidence_methods:
+            return "low"
         else:
-            return "medium"
+            return "not found"
     
     def extract_batch(self, filepaths: list) -> Dict[str, DateResult]:
         """

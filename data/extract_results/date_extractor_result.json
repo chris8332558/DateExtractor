@@ -18,7 +18,7 @@
   },
   {
     "url": "https://www.globalzero.org/crisis-response/ncg-recommendations/index.html",
-    "published_date": "2024-02-20 (method: regex on content, confidence: medium)",
+    "published_date": "2024-02-20 (method: regex on content, confidence: low)",
     "modified_date": "2018-10-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2024-02-20",
     "all_dates_found": [
@@ -35,7 +35,7 @@
   },
   {
     "url": "https://www.congress.gov/crs-product/IF11712",
-    "published_date": "2025-09-19 (method: regex on content, confidence: medium)",
+    "published_date": "2025-09-19 (method: regex on content, confidence: low)",
     "modified_date": "2021-04-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-09-19",
     "all_dates_found": [
@@ -81,7 +81,7 @@
   },
   {
     "url": "https://www.reuters.com/world/asia-pacific/chinese-us-military-chiefs-hold-crisis-communication-says-china-defence-ministry-2020-10-29/",
-    "published_date": "2020-10-29 (method: regex on content, confidence: medium)",
+    "published_date": "2020-10-29 (method: regex on content, confidence: low)",
     "modified_date": null,
     "last_date_found": "2020-10-29",
     "all_dates_found": [
@@ -199,7 +199,7 @@
   },
   {
     "url": "https://tjaglcs.army.mil/Periodicals/Military-Law-Review",
-    "published_date": "2025-04-24 (method: regex on content, confidence: medium)",
+    "published_date": "2025-04-24 (method: regex on content, confidence: low)",
     "modified_date": "2024-01-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-04-24",
     "all_dates_found": [
@@ -225,7 +225,7 @@
   },
   {
     "url": "https://carnegieendowment.org/posts/2021/06/chinese-russian-defense-cooperation-is-more-flash-than-bang?lang=en",
-    "published_date": "2021-06-17 (method: regex on content, confidence: medium)",
+    "published_date": "2021-06-17 (method: regex on content, confidence: low)",
     "modified_date": "2021-06-17 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -273,7 +273,7 @@
   },
   {
     "url": "https://2001-2009.state.gov/s/d/former/zoellick/rem/53682.htm",
-    "published_date": "2005-09-21 (method: regex on content, confidence: medium)",
+    "published_date": "2005-09-21 (method: regex on content, confidence: low)",
     "modified_date": "2009-01-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2009-01-01",
     "all_dates_found": [
@@ -315,7 +315,7 @@
   },
   {
     "url": "https://www.pbs.org/newshour/tag/south-china-sea",
-    "published_date": "2023-03-27 (method: regex on content, confidence: medium)",
+    "published_date": "2023-03-27 (method: regex on content, confidence: low)",
     "modified_date": "2024-07-20 (method: htmldate library, confidence: medium)",
     "last_date_found": "2024-07-20",
     "all_dates_found": [
@@ -325,7 +325,7 @@
   },
   {
     "url": "https://carnegieendowment.org/posts/2019/10/managing-risks-and-opportunities-for-the-us-japan-alliance-through-coordinated-china-policy?lang=en",
-    "published_date": "2019-10-10 (method: regex on content, confidence: medium)",
+    "published_date": "2019-10-10 (method: regex on content, confidence: low)",
     "modified_date": "2019-10-10 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -359,7 +359,7 @@
   },
   {
     "url": "https://www.un.org/en/global-issues/peace-and-security",
-    "published_date": "1945-10-24 (method: regex on content, confidence: medium)",
+    "published_date": "1945-10-24 (method: regex on content, confidence: low)",
     "modified_date": "2024-12-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2024-12-01",
     "all_dates_found": [
@@ -369,7 +369,7 @@
   },
   {
     "url": "https://www.shs-conferences.org/articles/shsconf/abs/2020/01/shsconf_ies_2019_01012/shsconf_ies_2019_01012.html",
-    "published_date": "2018-06-25 (method: regex on content, confidence: medium)",
+    "published_date": "2018-06-25 (method: regex on content, confidence: low)",
     "modified_date": "2020-01-13 (method: htmldate library, confidence: medium)",
     "last_date_found": "2020-01-13",
     "all_dates_found": [
@@ -379,7 +379,7 @@
   },
   {
     "url": "https://www.heritage.org/asia/report/submarine-arms-race-the-pacific-the-chinese-challenge-us-undersea-supremacy",
-    "published_date": "2010-02-02 (method: regex on content, confidence: medium)",
+    "published_date": "2010-02-02 (method: regex on content, confidence: low)",
     "modified_date": "2010-02-02 (method: htmldate library, confidence: medium)",
     "last_date_found": "2010-02-02",
     "all_dates_found": [
@@ -429,7 +429,7 @@
   },
   {
     "url": "https://twq.elliott.gwu.edu/",
-    "published_date": "2025-09-17 (method: regex on content, confidence: medium)",
+    "published_date": "2025-09-17 (method: regex on content, confidence: low)",
     "modified_date": "2025-09-17 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-09-17",
     "all_dates_found": [
@@ -447,7 +447,7 @@
   },
   {
     "url": "https://carnegieendowment.org/posts/2021/01/us-perceptions-of-china-in-the-pandemic-era-and-implications-for-us-policy?lang=en",
-    "published_date": "2021-01-21 (method: regex on content, confidence: medium)",
+    "published_date": "2021-01-21 (method: regex on content, confidence: low)",
     "modified_date": "2021-01-21 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -485,7 +485,7 @@
   },
   {
     "url": "https://www.sipri.org/databases/armstransfers",
-    "published_date": "2025-03-10 (method: regex on content, confidence: medium)",
+    "published_date": "2025-03-10 (method: regex on content, confidence: low)",
     "modified_date": "2025-03-10 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-03-10",
     "all_dates_found": [
@@ -494,7 +494,7 @@
   },
   {
     "url": "https://www.belfercenter.org/publication/us-china-strategic-competition-clues-history",
-    "published_date": "2020-02-03 (method: regex on content, confidence: medium)",
+    "published_date": "2020-02-03 (method: regex on content, confidence: low)",
     "modified_date": "2025-01-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-01-01",
     "all_dates_found": [
@@ -525,7 +525,7 @@
   },
   {
     "url": "https://carnegieendowment.org/research/2019/03/strategic-stability-in-the-changing-world?lang=en",
-    "published_date": "2019-03-21 (method: regex on content, confidence: medium)",
+    "published_date": "2019-03-21 (method: regex on content, confidence: low)",
     "modified_date": "2019-03-21 (method: htmldate library, confidence: medium)",
     "last_date_found": "2023-12-11",
     "all_dates_found": [
@@ -845,7 +845,7 @@
   },
   {
     "url": "https://www.belfercenter.org/publication/china-beating-us-ai-supremacy",
-    "published_date": "2020-08-04 (method: regex on content, confidence: medium)",
+    "published_date": "2020-08-04 (method: regex on content, confidence: low)",
     "modified_date": "2025-01-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-01-01",
     "all_dates_found": [
@@ -928,7 +928,7 @@
   },
   {
     "url": "https://carnegieendowment.org/posts/2020/03/us-china-cooperation-on-coronavirus-hampered-by-propaganda-war?lang=en",
-    "published_date": "2020-03-24 (method: regex on content, confidence: medium)",
+    "published_date": "2020-03-24 (method: regex on content, confidence: low)",
     "modified_date": "2020-03-24 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -1061,7 +1061,7 @@
   },
   {
     "url": "https://www.usmcu.edu/Outreach/Marine-Corps-University-Press/Expeditions-with-MCUP-digital-journal/Military-Competition-between-the-United-States-and-China-in-the-South-China-Sea/",
-    "published_date": "2020-12-18 (method: regex on content, confidence: medium)",
+    "published_date": "2020-12-18 (method: regex on content, confidence: low)",
     "modified_date": "2020-12-18 (method: htmldate library, confidence: medium)",
     "last_date_found": "2020-12-18",
     "all_dates_found": [
@@ -1126,7 +1126,7 @@
   },
   {
     "url": "https://www.centcom.mil/OPERATIONS-AND-EXERCISES/",
-    "published_date": "2016-07-21 (method: regex on content, confidence: medium)",
+    "published_date": "2016-07-21 (method: regex on content, confidence: low)",
     "modified_date": "2016-07-21 (method: htmldate library, confidence: medium)",
     "last_date_found": "2021-05-01",
     "all_dates_found": [
@@ -1209,7 +1209,7 @@
   },
   {
     "url": "https://www.isdp.eu/publication/critique-of-china-military-reform-present-and-future-parts-1-and-2/",
-    "published_date": "2019-11-14 (method: regex on content, confidence: medium)",
+    "published_date": "2019-11-14 (method: regex on content, confidence: low)",
     "modified_date": "2019-11-14 (method: htmldate library, confidence: medium)",
     "last_date_found": "2019-11-14",
     "all_dates_found": [
@@ -1231,7 +1231,7 @@
   },
   {
     "url": "https://digital-commons.usnwc.edu/cmsi-maritime-reports/",
-    "published_date": "2024-12-25 (method: regex on content, confidence: medium)",
+    "published_date": "2024-12-25 (method: regex on content, confidence: low)",
     "modified_date": "2016-07-26 (method: htmldate library, confidence: medium)",
     "last_date_found": "2024-12-25",
     "all_dates_found": [
@@ -1248,7 +1248,7 @@
   },
   {
     "url": "https://www.rand.org/paf/projects/us-china-scorecard.html",
-    "published_date": "2014-01-23 (method: regex on content, confidence: medium)",
+    "published_date": "2014-01-23 (method: regex on content, confidence: low)",
     "modified_date": "2025-01-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-01-01",
     "all_dates_found": [
@@ -1260,7 +1260,7 @@
   },
   {
     "url": "https://www.hks.harvard.edu/publications/destined-war-can-america-and-china-escape-thucydidess-trap",
-    "published_date": "2017-05-30 (method: regex on content, confidence: medium)",
+    "published_date": "2017-05-30 (method: regex on content, confidence: low)",
     "modified_date": "2017-05-30 (method: htmldate library, confidence: medium)",
     "last_date_found": "2017-05-30",
     "all_dates_found": [
@@ -1397,7 +1397,7 @@
   },
   {
     "url": "https://www.voxchina.org/show-3-227.html",
-    "published_date": "2021-04-28 (method: regex on content, confidence: medium)",
+    "published_date": "2021-04-28 (method: regex on content, confidence: low)",
     "modified_date": "2021-04-28 (method: htmldate library, confidence: medium)",
     "last_date_found": "2021-04-28",
     "all_dates_found": [
@@ -1517,7 +1517,7 @@
   },
   {
     "url": "https://www.isdp.eu/publication/british-navy-south-china-sea/",
-    "published_date": "2019-08-12 (method: regex on content, confidence: medium)",
+    "published_date": "2019-08-12 (method: regex on content, confidence: low)",
     "modified_date": "2019-08-12 (method: Open Graph protocol, confidence: high)",
     "last_date_found": "2019-08-12",
     "all_dates_found": [
@@ -1528,7 +1528,7 @@
   },
   {
     "url": "https://www.swp-berlin.org/10.18449/2020RP04/",
-    "published_date": "2019-09-16 (method: regex on content, confidence: medium)",
+    "published_date": "2019-09-16 (method: regex on content, confidence: low)",
     "modified_date": "2020-03-10 (method: htmldate library, confidence: medium)",
     "last_date_found": "2020-03-10",
     "all_dates_found": [
@@ -1663,7 +1663,7 @@
   },
   {
     "url": "https://carnegieendowment.org/research/2006/12/managing-sino-american-crises-case-studies-and-analysis?lang=en",
-    "published_date": "2006-12-04 (method: regex on content, confidence: medium)",
+    "published_date": "2006-12-04 (method: regex on content, confidence: low)",
     "modified_date": "2006-12-04 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -1730,7 +1730,7 @@
   },
   {
     "url": "https://www.swp-berlin.org/10.18449/2020RP03/",
-    "published_date": "2019-08-23 (method: regex on content, confidence: medium)",
+    "published_date": "2019-08-23 (method: regex on content, confidence: low)",
     "modified_date": "2019-09-24 (method: htmldate library, confidence: medium)",
     "last_date_found": "2019-09-24",
     "all_dates_found": [
@@ -1831,7 +1831,7 @@
   },
   {
     "url": "https://www.csis.org/analysis/what-us-one-china-policy-and-why-does-it-matter",
-    "published_date": "2024-09-25 (method: regex on content, confidence: medium)",
+    "published_date": "2024-09-25 (method: regex on content, confidence: low)",
     "modified_date": "2017-01-13 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-11-10",
     "all_dates_found": [
@@ -1855,7 +1855,7 @@
   },
   {
     "url": "https://www.ucs.org/resources/slowing-hypersonic-arms-race",
-    "published_date": "2021-05-05 (method: regex on content, confidence: medium)",
+    "published_date": "2021-05-05 (method: regex on content, confidence: low)",
     "modified_date": "2021-05-05 (method: htmldate library, confidence: medium)",
     "last_date_found": "2021-05-05",
     "all_dates_found": [
@@ -1864,7 +1864,7 @@
   },
   {
     "url": "https://www.congress.gov/crs-product/R46808",
-    "published_date": "2020-09-07 (method: regex on content, confidence: medium)",
+    "published_date": "2020-09-07 (method: regex on content, confidence: low)",
     "modified_date": "2021-06-04 (method: htmldate library, confidence: medium)",
     "last_date_found": "2021-06-04",
     "all_dates_found": [
@@ -1998,7 +1998,7 @@
   },
   {
     "url": "https://www.armscontrol.org/factsheets/hotline-agreements",
-    "published_date": "2018-08-24 (method: regex on content, confidence: medium)",
+    "published_date": "2018-08-24 (method: regex on content, confidence: low)",
     "modified_date": "2025-03-28 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-03-28",
     "all_dates_found": [
@@ -2106,7 +2106,7 @@
   },
   {
     "url": "https://www.acquisition.gov/dfars/part-225-foreign-acquisition",
-    "published_date": "2030-01-01 (method: regex on content, confidence: medium)",
+    "published_date": "2030-01-01 (method: regex on content, confidence: low)",
     "modified_date": "2025-10-24 (method: htmldate library, confidence: medium)",
     "last_date_found": "2030-01-01",
     "all_dates_found": [
@@ -2129,7 +2129,7 @@
   },
   {
     "url": "https://www.rand.org/pubs/research_reports/RR3139-1.html",
-    "published_date": "2020-04-28 (method: regex on content, confidence: medium)",
+    "published_date": "2020-04-28 (method: regex on content, confidence: low)",
     "modified_date": "2020-04-28 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -2139,7 +2139,7 @@
   },
   {
     "url": "https://www.compassgames.com/product/south-china-sea/",
-    "published_date": "2026-12-31 (method: regex on content, confidence: medium)",
+    "published_date": "2026-12-31 (method: regex on content, confidence: low)",
     "modified_date": "2022-10-16 (method: htmldate library, confidence: medium)",
     "last_date_found": "2026-12-31",
     "all_dates_found": [
@@ -2248,7 +2248,7 @@
   },
   {
     "url": "https://2017-2021.state.gov/chinas-military-aggression-in-the-indo-pacific-region/",
-    "published_date": "2021-01-13 (method: regex on content, confidence: medium)",
+    "published_date": "2021-01-13 (method: regex on content, confidence: low)",
     "modified_date": "2021-01-13 (method: Open Graph protocol, confidence: high)",
     "last_date_found": "2021-01-20",
     "all_dates_found": [
@@ -2301,7 +2301,7 @@
   },
   {
     "url": "https://www.tandfonline.com/doi/full/10.1080/00131857.2020.1799739",
-    "published_date": "2025-08-06 (method: regex on content, confidence: medium)",
+    "published_date": "2025-08-06 (method: regex on content, confidence: low)",
     "modified_date": "2022-08-24 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-08-06",
     "all_dates_found": [
@@ -2313,7 +2313,7 @@
   },
   {
     "url": "https://www.reachingcriticalwill.org/resources/fact-sheets/critical-issues/5448-outer-space",
-    "published_date": "2013-05-31 (method: regex on content, confidence: medium)",
+    "published_date": "2013-05-31 (method: regex on content, confidence: low)",
     "modified_date": "2014-10-11 (method: htmldate library, confidence: medium)",
     "last_date_found": "2014-10-11",
     "all_dates_found": [
@@ -2351,7 +2351,7 @@
   },
   {
     "url": "https://www.csis.org/analysis/four-scenarios-geopolitical-order-2025-2030-what-will-great-power-competition-look",
-    "published_date": "2025-08-05 (method: regex on content, confidence: medium)",
+    "published_date": "2025-08-05 (method: regex on content, confidence: low)",
     "modified_date": "2020-09-16 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-11-10",
     "all_dates_found": [
@@ -2377,7 +2377,7 @@
   },
   {
     "url": "https://carnegieendowment.org/research/2020/06/narrowing-the-us-china-gap-on-missile-defense-how-to-help-forestall-a-nuclear-arms-race?lang=en",
-    "published_date": "2020-06-29 (method: regex on content, confidence: medium)",
+    "published_date": "2020-06-29 (method: regex on content, confidence: low)",
     "modified_date": "2020-06-29 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-30",
     "all_dates_found": [
@@ -2443,7 +2443,7 @@
   },
   {
     "url": "https://carnegieendowment.org/posts/2015/07/americas-security-role-in-the-south-china-sea?lang=en",
-    "published_date": "2015-07-23 (method: regex on content, confidence: medium)",
+    "published_date": "2015-07-23 (method: regex on content, confidence: low)",
     "modified_date": "2015-07-23 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-10-28",
     "all_dates_found": [
@@ -2474,7 +2474,7 @@
   },
   {
     "url": "https://www.cartoonstock.com/directory/t/taiwan.asp",
-    "published_date": "2010-09-17 (method: regex on content, confidence: medium)",
+    "published_date": "2010-09-17 (method: regex on content, confidence: low)",
     "modified_date": "2010-09-17 (method: htmldate library, confidence: medium)",
     "last_date_found": "2010-09-17",
     "all_dates_found": [
@@ -2598,7 +2598,7 @@
   },
   {
     "url": "https://www.csis.org/analysis/china-and-united-states-cooperation-competition-andor-conflict",
-    "published_date": "2025-08-02 (method: regex on content, confidence: medium)",
+    "published_date": "2025-08-02 (method: regex on content, confidence: low)",
     "modified_date": "2019-01-10 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-11-10",
     "all_dates_found": [
@@ -2814,7 +2814,7 @@
   },
   {
     "url": "https://nsarchive2.gwu.edu/NSAEBB/NSAEBB49/",
-    "published_date": "2001-06-12 (method: regex on content, confidence: medium)",
+    "published_date": "2001-06-12 (method: regex on content, confidence: low)",
     "modified_date": "2001-06-12 (method: htmldate library, confidence: medium)",
     "last_date_found": "2001-06-12",
     "all_dates_found": [
@@ -2878,7 +2878,7 @@
   },
   {
     "url": "https://elliott.gwu.edu/graduate-course-descriptions-0",
-    "published_date": "2001-09-11 (method: regex on content, confidence: medium)",
+    "published_date": "2001-09-11 (method: regex on content, confidence: low)",
     "modified_date": "2025-01-01 (method: htmldate library, confidence: medium)",
     "last_date_found": "2025-01-01",
     "all_dates_found": [
