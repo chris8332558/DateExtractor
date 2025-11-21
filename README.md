@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ## HTML Date Extractor
 
-## ⚠ The extracted `pubslied_date` and `modified_date` are not perfectlly right, and we mainly use the `last_date_found` to compare with the `CUTOFF_DATE`.
+## ⚠ The extracted `pubslied_date` and `modified_date` are not perfectlly right.
 
 ### What it does
 - Extract published date and modified date (if possible) with multiple strategies.
@@ -22,8 +22,8 @@ pip install -r requirements.txt
         """Data class for storing extraction results."""
         published_date: Optional[datetime]
         modified_date: Optional[datetime]
-        published_method: ExtractionMethod
-        modified_method: ExtractionMethod
+        published_method: Optional[str] = ExtractionMethod.NOT_FOUND.value 
+        modified_method: Optional[str] = ExtractionMethod.NOT_FOUND.value
         published_raw: Optional[str] = None
         modified_raw: Optional[str] = None
         last_date_found: Optional[datetime] = None
@@ -49,17 +49,40 @@ extractor.print_dateResult(result)
 ```
 
 
-## Cutoff Filter
+### Run html_date_extractor_test.py
+
+Given HTML contents, use `HTMLDateExtractor` to extracte the `DateResult`.
+
+Store the filtered result to `data/extract_results/date_extractor_result.json`
+
+Here are the variable you can adjust in the `html_date_extractor_test.py`.
+```python
+INPUT_FILE = "data/first_content_sample.json"
+OUTPUT_FOLDER = "data/extract_results"
+USE_LLM_AS_FALLBACK = False
+OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"date_extractor_result.json")
+```
+
+
+### Run htmldate_test.py
+This only use tje `htmldate` to extract the `published_date` and `modified_date`.
+
+The output file is `data/extract_results/htmldate_resuts.json` 
+
+
 
 ### What is does
 Given HTML contents, use `HTMLDateExtractor` to extracte the `DateResult`.
 
-Store the filtered result to `data/cutoff_results/date_extractor_result.json`
+Store the filtered result to `data/extract_results/date_extractor_result.json`
 
-### How To Use
-Go to `cutoff_filter.py`, change the `INPUT_FILE` and `OUTPUT_FILE`, and extract the HTML content from the `INPUT_FILE` as requried.
-
-
+Here are the variable you can adjust in the `html_date_extractor_test.py`.
+```python
+INPUT_FILE = "data/first_content_sample.json"
+OUTPUT_FOLDER = "data/extract_results"
+USE_LLM_AS_FALLBACK = False
+OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"date_extractor_result.json")
+```
 
 
 ## Data
