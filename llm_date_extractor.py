@@ -1,13 +1,14 @@
 import asyncio
 import json
-from typing import List, Dict, Tuple, Any
 import aiohttp
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 import logging
 import re
 import tiktoken
 import time
+from typing import List, Dict, Any
+from sklearn.metrics.pairwise import cosine_similarity
+from shared import DateResult, ExtractionMethod
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
@@ -118,21 +119,20 @@ class LLMDateExtractor:
             return await resp.json()
 
 
-    async def extract_dates(self, url: str, html_content: str) -> Dict:
+    async def extract_dates(self, html_content: str) -> DateResult:
         """
         Try to extract published date and modified date with LLM
 
         Args:
-            url: The url of the html_content for storing in the json file
             html_content: The raw html
 
         Return: 
             Dictionry output from the LLM, will be used as json object.
             {
-                "url": "The Provided URL",
-                "published_date": "YYYY-MM-DD",
-                "modified_date": "YYYY-MM-DD",
-                "extraction_method": "json-ld" OR "meta-tags" OR "html-body"
+                "published_date": "YYYY-MM-DD" or null,
+                "pub_extraction_method": "json-ld" or "meta-tags" or "html-body" or null,
+                "modified_date": "YYYY-MM-DD" or null,
+                "mod_extraction_method": "json-ld" or "meta-tags" or "html-body" or null
             }
         """
         
@@ -143,7 +143,6 @@ class LLMDateExtractor:
 
         Extraction Rules:
 
-        URL: The url will be provided.
         Dates & Method: For both published_date and modified_date individually, search in the following strict priority order. Once you find valid dates in a higher priority source, stop looking and use that source as the extraction_source.
         - Priority 1: json-ld (Look for datePublished/dateModified in <script type="application/ld+json">).
         - Priority 2: meta-tags (Look for article:published_time, og:updated_time, etc.).
@@ -165,7 +164,6 @@ class LLMDateExtractor:
 
         <JSON>
         {{
-            "url": "The Provided URL",
             "published_date": "YYYY-MM-DD" or null,
             "pub_extraction_method": "json-ld" or "meta-tags" or "html-body" or null,
             "modified_date": "YYYY-MM-DD" or null,
@@ -173,7 +171,6 @@ class LLMDateExtractor:
         }}
         </JSON>
         Input HTML: [{html_content}]
-        Provided URL: {url}
         """
         
         payload = {
@@ -185,6 +182,11 @@ class LLMDateExtractor:
             "temperature": 0.7,
         }
 
+        method_to_confidence = {
+            "json-ld": "high",
+            "meta-tags": "medium",
+            "html-body": "low"
+        }
         
         max_tries = 3
         for _ in range(max_tries):
@@ -193,32 +195,37 @@ class LLMDateExtractor:
                 # print(f"response: {response}")
                 content = response['choices'][0]['message']['content'].strip()
 
-                print(f"\ncontent: {content}")
+                # print(f"\ncontent: {content}")
                 # Extract JSON array from the response
                 match = re.search(r'<JSON>(.*?)</JSON>', content, re.DOTALL)
 
-                print(f"\nmatch: {match}")
+                # print(f"\nmatch: {match}")
                 if match:
                     json_content = match.group(1).strip()
                     extract_result = json.loads(json_content)
+
                     if isinstance(extract_result, Dict):
-                        return extract_result 
+                        return DateResult(
+                            published_date=extract_result['published_date'],
+                            modified_date=extract_result['modified_date'],
+                            published_method=f"{ExtractionMethod.LLM.value} ({extract_result['pub_extraction_method']})",
+                            modified_method=f"{ExtractionMethod.LLM.value} ({extract_result['mod_extraction_method']})",
+                            pub_confidence=method_to_confidence[extract_result['pub_extraction_method']],
+                            mod_confidence=method_to_confidence[extract_result['mod_extraction_method']]
+                        )
                     else:
                         raise ValueError("Invalid JSON format or length")
 
             except Exception as e:
                 logger.error(f"Error extracting dates: {e}, retrying...")
         
-        return json.loads(
-            f"""
-            {{
-            "url": {url},
-            "published_date": null,
-            "pub_extraction_method": null,
-            "modified_date": null,
-            "mod_extraction_method": null
-            }}
-            """
+        return DateResult(
+            published_date=None,
+            modified_date=None,
+            published_method=f"{ExtractionMethod.LLM.value} ({ExtractionMethod.NOT_FOUND.value})",
+            modified_method=f"{ExtractionMethod.LLM.value} ({ExtractionMethod.NOT_FOUND.value})",
+            pub_confidence="low",
+            mod_confidence="low"
         )
 
     def chunk_text(text: str,
@@ -242,9 +249,6 @@ class LLMDateExtractor:
 async def main():
     
     # Example usage
-    # Initialize extractor
-    LLMExtractor = LLMDateExtractor()
-
     # Example HTML content
     example_html = """
     <!DOCTYPE html>
@@ -275,11 +279,14 @@ async def main():
     print("===== LLMExtractor Start =====")
     
     async with LLMDateExtractor() as extractor:
-        result = await extractor.extract_dates(url="https://test_url.com", html_content=example_html)
+        start_time = time.perf_counter()
+        result = await extractor.extract_dates(html_content=example_html)
         print("\n" + "="*80)
         print("Extract Result")
         print("="*80)
         print(result)
+        end_time = time.perf_counter()
+        logger.info(f"Took {end_time - start_time:.2f} seconds to extract the dates.")
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -28,44 +28,18 @@ Our ndjson file content:
 
 }
 """
-
+import asyncio
 import logging
 import re
-from datetime import date, datetime
+import dateparser
+from datetime import datetime
 from typing import Optional, Dict, Tuple, List
-from pathlib import Path
 from dataclasses import dataclass, field
-from enum import Enum
 from lxml import html, etree
 from dateutil import parser
-import dateparser
+from llm_date_extractor import LLMDateExtractor
+from shared import DateResult, ExtractionMethod
 
-
-class ExtractionMethod(Enum):
-    """Enum for tracking which method successfully extracted the date."""
-    OPEN_GRAPH = "Open Graph protocol"
-    HTML5_TIME = "HTML5 time element"
-    META_TAGS = "meta tags"
-    JSON_LD = "JSON-LD structured data"
-    CSS_SELECTORS = "CSS selectors"
-    # REGEX_CONTENT = "regex on content"
-    HTMLDATE_LIB = "htmldate library"
-    NOT_FOUND = "not found"
-
-
-@dataclass
-class DateResult:
-    """Data class for storing extraction results."""
-    published_date: Optional[date]
-    modified_date: Optional[date]
-    published_method: ExtractionMethod
-    modified_method: ExtractionMethod
-    published_raw: Optional[str] = None
-    modified_raw: Optional[str] = None
-    last_date_found: Optional[date] = None
-    dates_found: List[date] = field(default_factory=list) # When defining a field with a mutable default value (like a list, dictionary, or set) directly, for example, my_list: list = [], all instances of the class would share the same list object. This means if you modify the list in one instance, it would affect all other instances, leading to unexpected behavior. 
-    pub_confidence: str = "medium"  # high, medium, low
-    mod_confidence: str = "medium"  # high, medium, low
 
 
 class HTMLDateExtractor:
@@ -194,7 +168,7 @@ class HTMLDateExtractor:
                 mud_confidence="low"
             )
     
-    def extract_from_html(self, html_content: str, source: str = "string") -> DateResult:
+    def extract_from_html(self, html_content: str, use_llm_as_fallback: bool = False) -> DateResult:
         """
         Extract dates from HTML content using multiple strategies.
         
@@ -205,7 +179,6 @@ class HTMLDateExtractor:
         Returns:
             DateResult containing extracted dates and metadata
         """
-        self.logger.debug(f"Extracting dates from {source}")
         
         try:
             tree = html.fromstring(html_content)
@@ -214,8 +187,8 @@ class HTMLDateExtractor:
             return DateResult(
                 published_date=None,
                 modified_date=None,
-                published_method=ExtractionMethod.NOT_FOUND,
-                modified_method=ExtractionMethod.NOT_FOUND,
+                published_method=ExtractionMethod.NOT_FOUND.value,
+                modified_method=ExtractionMethod.NOT_FOUND.value,
                 pub_confidence="low",
                 mod_confidence="low"
             )
@@ -228,7 +201,7 @@ class HTMLDateExtractor:
         pub_confidence = self._calculate_confidence(pub_method)
         mod_confidence = self._calculate_confidence(mod_method)
 
-        all_dates = self._extract_all_dates(tree, html_content)
+        all_dates = self._extract_all_dates(tree)
         if published_date and published_date not in all_dates:
             all_dates.append(published_date)
         if modified_date and modified_date not in all_dates:
@@ -238,18 +211,24 @@ class HTMLDateExtractor:
         
         # Log results
         if published_date:
-            self.logger.info(
-                f"Published date found: {published_date} (method: {pub_method.value})"
-            )
+            self.logger.info(f"Published date found: {published_date} (method: {pub_method})")
         else:
             self.logger.warning("Published date not found")
         
         if modified_date:
-            self.logger.info(
-                f"Modified date found: {modified_date} (method: {mod_method.value})"
-            )
+            self.logger.info(f"Modified date found: {modified_date} (method: {mod_method})")
         else:
             self.logger.debug("Modified date not found (may not exist)")
+
+        # Fallback to use LLM to extract pubslished and modified dates if they're both None
+        # published_date, modified_date = None, None
+        if not published_date and not modified_date and use_llm_as_fallback:
+            llm_result = asyncio.run(self._extract_with_llm(html_content=html_content))
+            published_date, pub_method = llm_result.published_date, llm_result.published_method
+            modified_date, mod_method = llm_result.modified_date, llm_result.modified_method
+            pub_confidence, mod_confidence = llm_result.pub_confidence, llm_result.mod_confidence
+            pub_raw, mod_raw = "", ""
+
         
         return DateResult(
             published_date=published_date,
@@ -264,7 +243,7 @@ class HTMLDateExtractor:
             mod_confidence=mod_confidence
         )
     
-    def _extract_all_dates(self, tree: etree._Element, html_content: str) -> List[datetime]:
+    def _extract_all_dates(self, tree: etree._Element) -> List[datetime]:
         # Combine all text nodes adn meta tag content
         all_text = []
 
@@ -301,7 +280,7 @@ class HTMLDateExtractor:
         
     def _extract_published_date(
         self, tree: etree._Element, html_content: str
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract published date using multiple strategies."""
         
         # Strategy 1: JSON-LD structured data (Schema.org)
@@ -341,11 +320,11 @@ class HTMLDateExtractor:
             if result[0]:
                 return result
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_modified_date(
         self, tree: etree._Element, html_content: str
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract modified date using multiple strategies."""
         
         # Strategy 1: JSON-LD structured data
@@ -379,11 +358,11 @@ class HTMLDateExtractor:
             if result[0]:
                 return result
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_from_jsonld(
         self, tree: etree._Element, date_field: str
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract date from JSON-LD structured data."""
         import json
         
@@ -401,17 +380,17 @@ class HTMLDateExtractor:
                             parsed_date = self._parse_date(date_str)
                             if parsed_date:
                                 self.logger.debug(f"Found date in JSON-LD: {date_str}")
-                                return parsed_date, ExtractionMethod.JSON_LD, date_str
+                                return parsed_date, ExtractionMethod.JSON_LD.value, date_str
                 except json.JSONDecodeError:
                     continue
         except Exception as e:
             self.logger.debug(f"JSON-LD extraction failed: {e}")
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_from_opengraph(
         self, tree: etree._Element, meta_names: list
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract date from Open Graph meta tags."""
         for name in meta_names:
             # Try property attribute (Open Graph)
@@ -421,13 +400,13 @@ class HTMLDateExtractor:
                 parsed_date = self._parse_date(date_str)
                 if parsed_date:
                     self.logger.debug(f"Found date in OG property: {date_str}")
-                    return parsed_date, ExtractionMethod.OPEN_GRAPH, date_str
+                    return parsed_date, ExtractionMethod.OPEN_GRAPH.value, date_str
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_from_time_element(
         self, tree: etree._Element, selectors: list
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract date from HTML5 time elements."""
         for selector in selectors:
             elements = tree.cssselect(selector)
@@ -441,13 +420,13 @@ class HTMLDateExtractor:
                     parsed_date = self._parse_date(date_str)
                     if parsed_date:
                         self.logger.debug(f"Found date in time element: {date_str}")
-                        return parsed_date, ExtractionMethod.HTML5_TIME, date_str
+                        return parsed_date, ExtractionMethod.HTML5_TIME.value, date_str
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_from_meta_tags(
         self, tree: etree._Element, meta_names: list
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract date from meta tags."""
         for name in meta_names:
             # Try name attribute
@@ -461,13 +440,13 @@ class HTMLDateExtractor:
                 parsed_date = self._parse_date(date_str)
                 if parsed_date:
                     self.logger.debug(f"Found date in meta tag: {date_str}")
-                    return parsed_date, ExtractionMethod.META_TAGS, date_str
+                    return parsed_date, ExtractionMethod.META_TAGS.value, date_str
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_from_selectors(
         self, tree: etree._Element, selectors: list
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract date using CSS selectors."""
         for selector in selectors:
             try:
@@ -484,30 +463,15 @@ class HTMLDateExtractor:
                         parsed_date = self._parse_date(date_str)
                         if parsed_date:
                             self.logger.debug(f"Found date via selector: {date_str}")
-                            return parsed_date, ExtractionMethod.CSS_SELECTORS, date_str
+                            return parsed_date, ExtractionMethod.CSS_SELECTORS.value, date_str
             except Exception:
                 continue
         
-        return None, ExtractionMethod.NOT_FOUND, None
-    
-    def _extract_from_regex(
-        self, html_content: str
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
-        """ Not using now (Not Reliable) """
-        """Extract date using regex patterns on content."""
-        for pattern in self.DATE_PATTERNS:
-            matches = re.findall(pattern, html_content, re.IGNORECASE)
-            for match in matches[:5]:  # Check first 5 matches
-                parsed_date = self._parse_date(match)
-                if parsed_date:
-                    self.logger.debug(f"Found date via regex: {match}")
-                    return parsed_date, ExtractionMethod.REGEX_CONTENT, match
-        
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
     
     def _extract_with_htmldate(
         self, html_content: str, original: bool = True
-    ) -> Tuple[Optional[datetime], ExtractionMethod, Optional[str]]:
+    ) -> Tuple[Optional[datetime], Optional[str], Optional[str]]:
         """Extract date using htmldate library."""
         try:
             from htmldate_test import find_date
@@ -523,11 +487,18 @@ class HTMLDateExtractor:
                 parsed_date = self._parse_date(date_str)
                 if parsed_date:
                     self.logger.debug(f"Found date via htmldate: {date_str}")
-                    return parsed_date, ExtractionMethod.HTMLDATE_LIB, date_str
+                    return parsed_date, ExtractionMethod.HTMLDATE_LIB.value, date_str
         except Exception as e:
             self.logger.debug(f"htmldate extraction failed: {e}")
         
-        return None, ExtractionMethod.NOT_FOUND, None
+        return None, ExtractionMethod.NOT_FOUND.value, None
+
+    async def _extract_with_llm(self, html_content: str) -> DateResult:
+        """Using LLM to extract both published date and modified date"""
+        print("===== LLMExtractor Start =====")
+        async with LLMDateExtractor() as extractor:
+            result = await extractor.extract_dates(html_content=html_content)
+            return result
     
     def _parse_date(self, date_string: str) -> Optional[datetime]:
         """
@@ -565,18 +536,18 @@ class HTMLDateExtractor:
     ) -> str:
         """Calculate confidence level based on extraction methods used."""
         high_confidence_methods = {
-            ExtractionMethod.JSON_LD,
-            ExtractionMethod.OPEN_GRAPH
+            ExtractionMethod.JSON_LD.value,
+            ExtractionMethod.OPEN_GRAPH.value
         }
         
         medium_confidence_methods = {
-            ExtractionMethod.META_TAGS,
-            ExtractionMethod.HTMLDATE_LIB
+            ExtractionMethod.META_TAGS.value,
+            ExtractionMethod.HTMLDATE_LIB.value
         }
 
         low_confidence_methods = {
-            ExtractionMethod.HTML5_TIME,
-            ExtractionMethod.CSS_SELECTORS,
+            ExtractionMethod.HTML5_TIME.value,
+            ExtractionMethod.CSS_SELECTORS.value,
         }
         
         if extract_method in high_confidence_methods:
@@ -618,14 +589,15 @@ class HTMLDateExtractor:
         self.logger.info(f"Batch extraction complete. Processed {len(results)} files")
         return results
 
+    @classmethod
     def print_dateResult(self, aDateResult: DateResult):
         print("\n=== Date Extraction Results ===")
         print(f"Published Date: {aDateResult.published_date}")
-        print(f"Published Method: {aDateResult.published_method.value}")
+        print(f"Published Method: {aDateResult.published_method}")
         print(f"Published Raw: {aDateResult.published_raw}")
         print(f"Published Confidence: {aDateResult.pub_confidence}")
         print(f"\nModified Date: {aDateResult.modified_date}")
-        print(f"Modified Method: {aDateResult.modified_method.value}")
+        print(f"Modified Method: {aDateResult.modified_method}")
         print(f"Modified Raw: {aDateResult.modified_raw}")
         print(f"Modified Confidence: {aDateResult.mod_confidence}")
         print(f"\nAll Dates Found: {aDateResult.dates_found}")
@@ -666,7 +638,7 @@ if __name__ == "__main__":
     """
     
     # Extract dates
-    result = extractor.extract_from_html(example_html)
+    result = extractor.extract_from_html(example_html, use_llm_as_fallback=True)
     
     # Display results
     extractor.print_dateResult(result)

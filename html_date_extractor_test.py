@@ -16,6 +16,8 @@ if __name__ == "__main__":
 
     INPUT_FILE = "data/first_content_sample.json"
     OUTPUT_FOLDER = "data/extract_results"
+    USE_LLM_AS_FALLBACK = False
+    print(f"USE_LLM_AS_FALLBACK: {USE_LLM_AS_FALLBACK}")
 
     try:
         os.makedirs(OUTPUT_FOLDER, exist_ok=True)
@@ -24,7 +26,7 @@ if __name__ == "__main__":
         print(f"Error creating folder: {e}")
 
     OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, f"date_extractor_result.json")
-    cutoff_results = []
+    extract_results = []
 
     # Load html content from the INPUT_FILE
     with open(INPUT_FILE, 'r', encoding='utf-8') as f:
@@ -36,11 +38,11 @@ if __name__ == "__main__":
         html_content = d['text']
         isValid = d['success']
 
-        date_result = extractor.extract_from_html(html_content)
-        published_date_str = f"{date_result.published_date.isoformat()} (method: {date_result.published_method.value}, confidence: {date_result.pub_confidence})" if date_result.published_date else None
-        modified_date_str = f"{date_result.modified_date.isoformat()} (method: {date_result.modified_method.value}, confidence: {date_result.mod_confidence})" if date_result.modified_date else None
+        date_result = extractor.extract_from_html(html_content, use_llm_as_fallback=USE_LLM_AS_FALLBACK)
+        published_date_str = f"{date_result.published_date.isoformat()} (method: {date_result.published_method}, confidence: {date_result.pub_confidence})" if date_result.published_date else None
+        modified_date_str = f"{date_result.modified_date.isoformat()} (method: {date_result.modified_method}, confidence: {date_result.mod_confidence})" if date_result.modified_date else None
         if isValid:
-            cutoff_results.append({
+            extract_results.append({
                 'url': url,
                 'published_date': published_date_str,
                 'modified_date': modified_date_str,
@@ -52,7 +54,7 @@ if __name__ == "__main__":
     # Write the results to the OUTPUT_FILE
     try: 
         with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-            json.dump(cutoff_results, f, ensure_ascii=False, indent=2)
-        print(f"✅ Successfully wrote {len(cutoff_results)} cutoff results to '{OUTPUT_FILE}'")
+            json.dump(extract_results, f, ensure_ascii=False, indent=2)
+        print(f"✅ Successfully wrote {len(extract_results)} cutoff results to '{OUTPUT_FILE}'")
     except Exception as e:
         print(f"❌ An error occurred while writing to file: {e}")
