@@ -279,9 +279,6 @@ class HTMLDateExtractor:
                 all_text.append(meta.get('value'))
         source = '\n'.join(all_text)
     
-        # Regex for %Y-%m-%d only (without time)
-        pattern = r'\b\d{4}-\d{2}-\d{2}\b'
-        # self.logger.info(f"source: {source}")
         # Use regex patterns for date candidates
         candidates = set()
         for pattern in self.DATE_PATTERNS:
@@ -298,7 +295,6 @@ class HTMLDateExtractor:
                 if key not in seen:
                     dates.append(dt)
                     seen.add(key)
-        # Sort by date
         self.logger.info(f"All Dates Found (unsorted): {dates}")
         return dates
         
